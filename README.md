@@ -1,8 +1,12 @@
 # To Trust, or Not to Trust, That is the Critical Question: Responsible Code Generation with Adversarial Vulnerability Awareness and Calibration Resonance
+<img width="488" height="575" alt="Chat with Context TRUST S P" src="https://github.com/user-attachments/assets/64dd71f1-89e4-4596-b0ef-0b71bb715540" />
 
 # Abstract
 
 Large Language Models (LLMs) have demonstrated remarkable capabilities in code generation, yet their outputs often lack trustworthiness, as ambiguity and latent vulnerabilities pervade. When such code is directly integrated into systems, particularly within security-sensitive or safety-critical domains, these vulnerabilities may introduce unforeseen risks and attack surfaces. This paper presents a novel framework, TRUST, for responsible code generation that tackles inherent trust deficits in existing LLM-based code generation systems. Central to our approach is a vulnerability-aware model that operates within an adversarial refinement framework, iteratively improving the security posture of generated code. At each step, the system not only enhances code robustness but also produces interpretable explanations for identified vulnerabilities. To mitigate the risk of model overconfidence, a well-documented issue in generative systems, we introduce a calibration mechanism that enables the LLM to recognize the boundaries of its own trustworthiness. When prompted with inputs beyond its trust boundaries, the model abstains from generation and issues a refusal response, such as ``\textit{I cannot do that... because...}'', thereby preventing the emission of potentially insecure or misleading code. To enable these capabilities, we employ a novel training paradigm that leverages large-scale code version histories and commit logs. This paradigm equips the model with a deeper understanding of code evolution, vulnerability patterns, and trust boundaries, facilitating more secure and context-aware code generation. Evaluation results, based on a newly introduced benchmark dataset \textit{TRUST-Bench}, show that our method establishes a robust and responsible pathway for adversarial code generation with calibration resonance, outperforming state-of-the-art pre-trained LLMs as well as the SafeCoder training framework, which was derived from its predecessor SVEN.
+
+
+<img width="2164" height="1085" alt="Responsbile AI (4) (1)-1" src="https://github.com/user-attachments/assets/ed0e9e5c-7fe3-40d9-864a-2b4dfe234282" />
 
 # Data Collection
 
