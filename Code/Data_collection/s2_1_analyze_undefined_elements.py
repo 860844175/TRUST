@@ -43,18 +43,18 @@ Assume you are a software expert specializing in C code. I will provide you with
 task1_user = """Here are the snippets:
 
 Pre-version code snippet:
-```
+
 
 {}
 
-```
+
 
 After-version code snippet:
-```
+
 
 {}
 
-```"""
+"""
 
 # System prompt for Task 2: locate definitions/assignments in full code
 task2_system = """
@@ -77,13 +77,11 @@ Assume you are a software expert specializing in C code. I will provide you with
     - Add that struct type to the Structures list and remove the pointer variable from Variables.
 
 **Output**:
-```
 
-Functions = \[...,]
-Variables = \[...,]
-Structures = \[...,]
+Functions = [...,]
+Variables = [...,]
+Structures = [...,]
 
-```
 """
 
 task2_user = """Here is the input:
