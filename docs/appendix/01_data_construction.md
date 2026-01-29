@@ -1,0 +1,34 @@
+# Detailed TRUST Dataset Construction
+
+To support the training and evaluation of secure code generation models, we construct **TRUST-Bench**, a dataset derived from real-world version control histories of widely used C-based open-source projects. Our goal is to extract high-confidence vulnerability-fix instances along with benign examples to support security-related tasks. This section outlines the data acquisition pipeline, which terminates at the commit level, prior to sample-level processing.
+
+**Data Collection:** For the training dataset, we begin by selecting several widely used C-based open-source repositories (e.g., Android, FFmpeg, OpenSSL), focusing on commits to those before the end of 2022 for the training set. Our data construction follows a multi-stage pipeline designed to extract genuine vulnerability-fix instances while filtering out irrelevant or excessively convoluted commits:
+
+*   **Keyword-based Mining.** We compile a list of security-related keywords (e.g., "fix", "vulnerability", "risk") based on domain knowledge, and flag commits whose messages contain at least one such term. This step yields over *500K* potentially security-relevant commits.
+
+*   **Rule-based Pre-filtering.** Commits that involve non-C files, modify an excessive number of files or code blocks, or result in overly long diffs are discarded to ensure consistency and model compatibility (e.g., avoiding token limit issues during inference).
+
+*   **Semantic Validation.** For the remaining candidates, we use the *GPT-4o* model to assess the security relevance of each commit. A commit is retained if it satisfies both of the following conditions: (1) the pre-fix code contains a potentially vulnerable construct or insecure pattern; and (2) the post-fix change plausibly mitigates that issue. Commits meeting both criteria are considered high-confidence security fixes and are kept for downstream use.
+
+*   **Function-Level Context Extraction and Atomicity Enforcement.** To improve semantic clarity and reduce label ambiguity, we retain only commits that modify a single file and contain a single diff hunk, assuming each reflects a single vulnerability fix. Multi-file or multi-hunk commits often correspond to compound patches or broad hardening efforts involving cross-file dependencies, which are harder to interpret and less suitable for learning localized fix patterns. By focusing on atomic, self-contained patches, we enable more reliable downstream tasks such as vulnerability localization, causal analysis, and patch generation.
+
+Table `Appendix:commit_filtering` summarizes the remaining vulnerability commits after each filtering step.
+
+> [!NOTE]
+> **Table Placeholder**: This section references `Table/8_Appendix_Application_Table`. Please add the table content here.
+
+For the test dataset, we observe that pre-trained LLMs, such as *Qwen2.5-Coder* and *DeepSeek-Coder-V2*, have been developed within the past two years. To mitigate the risk of data leakage, where parts of test set may overlap with LLM training data, we exclusively select vulnerabilities published in 2023 and 2024 with assigned CVE identifiers. Additionally, we considered two key factors when curating the test set. First, patches with concentrated code changes are more suitable for masking, as the core modifications can be effectively targeted. Second, if the function containing the masked changes is excessively long, it pose challenges due to the token limitations of LLMs. Balancing these considerations, we filtered the collected vulnerability patches and finalized a test set comprising 274 high-quality instances.
+
+Training solely on vulnerable code is insufficient, which will hinder the ability of inspection models to identify benign cases accurately, compromising their capability to determine the absence of vulnerabilities. To address this, we curated *5,000* benign examples from five repositories (gpac, ImageMagick, vim, openssl, FFmpeg) for balance and representativeness. To ensure the correctness of these benign functions, we leveraged the git log to rank functions by their lifespan within each repository, prioritizing the longest-surviving code as the safest candidates.
+
+**Data Processing:** Providing adequate context information is essential for fairness in code completion tasks with masked code snippets. If the mask references external functions, globally defined variables, or data structures, it is unrealistic to expect LLMs to generate accurate and meaningful completions without access to this contextual information. This limitation is particularly pronounced when the model encounters repositories it has not been exposed to during training. To address this, necessary context information must be included with the masked code snippets during both training and evaluation phases. As our experiment handles function-level code snippets, the relevant context for a given function is primarily composed of its callee functions and any undefined variables referenced within its body. In contrast, the caller function does not directly contribute to the semantic or syntactic structure of the masked function and is therefore excluded from the context.
+
+For the testing data, we ensure data quality by manually collecting all relevant contexts for the masked code. For training data, we adopt a suite of automated definition retrieval techniques. Specifically, for macro definitions, context information is extracted during the precompilation phase through macro expansion, utilizing tools such as Bear. For other definitions, we employ srcML to generate an XML-based representation of each repository. By parsing and querying this structured format, relevant context definitions can be efficiently identified. It is worth noting that a single line of code may involve extensive contextual dependencies, such as functions and variables. However, due to token limitations, we limit the scope of context retrieval to avoid iterative tracing.
+
+The extracted dataset serves as the foundation for training the two key modules in our system pipeline.
+
+Each collected commit provides a structured triplet:
+$(C_{pre}, m, C_{fix})$, where $C_{pre}$ denotes the pre-fix (vulnerable) code, $C_{fix}$ is the corresponding post-fix (patched) code, and $m$ is the commit message describing the change. These triplets serve as supervision for two learning objectives:
+
+*   **Trust Inspection (Task 1):** The model learns to identify vulnerable code spans in $C_{pre}$ and generate natural language explanations that align with the semantics of the corresponding patch $(C_{fix})$ and message $m$.
+*   **Calibration (Task 2):** By comparing LLM-generated patches to the gold-standard post-fix code $C_{fix}$, the model learns to assess whether a proposed refinement successfully mitigates the identified vulnerabilities.
