@@ -3,8 +3,6 @@
 ![The relationship between code snippet length and model uncertainty.](./assets/Appendix_PPL_vs_TokenLength.png)
 *Figure: The relationship between code snippet length and model uncertainty.*
 
-> [!NOTE]
-> Please ensure `Appendix_PPL_vs_TokenLength.png` is placed in the `docs/appendix/assets/` directory.
 
 Perplexity (PPL) is a metric commonly used to measure how confident a language model is when making predictions. In simple terms, it reflects how "confused" the model is when processing a given input. A lower PPL means the model finds the input more predictable or familiar, while a higher PPL indicates that the model is uncertain or surprised by the input.
 

@@ -1,7 +1,15 @@
 # Human Evaluation Rubric for TRUST-Bench
 
-> [!NOTE]
-> **Table Placeholder**: This section references `Table/8_Appendix_Evaluation_Rubric`. Please add the table content here.
+<a id="tab:rubric_trustbench"></a>
+| **Evaluation Aspect** | **Assessment Criteria** | **Outcome** |
+| :--- | :--- | :--- |
+| Vulnerability Mask Accuracy | The automatically generated vulnerability mask correctly covers the vulnerable code regions modified or fixed by the commit, and the marked region is sufficiently precise without excessively extending beyond the true vulnerable code span. | Pass / Fail |
+| Explanation--Code Alignment | The natural language explanation accurately describes the root cause of the vulnerability and is consistent with the semantic changes introduced by the corresponding commit. | Pass / Fail |
+| Explanation Completeness | The explanation captures the key security-relevant aspects of the vulnerability, such as triggering conditions, consequences, or misuse patterns, without omitting critical information. | Pass / Fail |
+| Semantic Consistency | The vulnerability mask, explanation, and code diff are mutually consistent and describe the same vulnerability instance without contradiction. | Pass / Fail |
+| Overall Sample Validity | After considering all criteria above, the sample is deemed suitable for use as reliable supervision in downstream training and evaluation. | Retain / Revise / Remove |
+
+*Caption: Human Evaluation Rubric for TRUST-Bench Quality Control.*
 
 To ensure the quality and reliability of TRUST-Bench, we conduct a structured human evaluation based on the rubric in the table referenced above.
 The rubric evaluates five aspects critical for vulnerability-aware supervision: vulnerability mask accuracy, explanation–code alignment, explanation completeness, semantic consistency, and overall sample validity.

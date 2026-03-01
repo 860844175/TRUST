@@ -5,5 +5,4 @@ As discussed in Section `4.3_RQ2_Adversarial`, our dataset covers 39 distinct CW
 ![Distribution of Non-Null CWE Samples in the Test Set Mapped to CWE Top-25.](./assets/CWE-distribution.png)
 *Figure: Distribution of Non-Null CWE Samples in the Test Set Mapped to CWE Top-25.*
 
-> [!NOTE]
-> Please ensure `CWE-distribution.png` is placed in the `docs/appendix/assets/` directory.
+

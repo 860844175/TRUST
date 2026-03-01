@@ -14,8 +14,18 @@ To support the training and evaluation of secure code generation models, we cons
 
 Table `Appendix:commit_filtering` summarizes the remaining vulnerability commits after each filtering step.
 
-> [!NOTE]
-> **Table Placeholder**: This section references `Table/8_Appendix_Application_Table`. Please add the table content here.
+<a id="Appendix:commit_filtering"></a>
+| **Software** | **Step 1** | **Step 2** | **Step 3** | **Step 4** |
+| :--- | :--- | :--- | :--- | :--- |
+| Android kernel | 964,615 | 353,484 | 83,667 | 11,128 |
+| FFmpeg | 66,755 | 36,066 | 13,162 | 1,830 |
+| GPAC | 10,871 | 4,027 | 961 | 64 |
+| ImageMagick | 4,754 | 2,995 | 1,417 | 43 |
+| OpenSSL | 27,817 | 7,221 | 2,805 | 444 |
+| ReactOS | 44,184 | 14,518 | 4,282 | 343 |
+| tmux | 3,741 | 1,520 | 349 | 90 |
+*Caption: Number of remaining commits per project after each processing step. Step 4 represents the final set of atomic, high-confidence vulnerability fixes.*
+
 
 For the test dataset, we observe that pre-trained LLMs, such as *Qwen2.5-Coder* and *DeepSeek-Coder-V2*, have been developed within the past two years. To mitigate the risk of data leakage, where parts of test set may overlap with LLM training data, we exclusively select vulnerabilities published in 2023 and 2024 with assigned CVE identifiers. Additionally, we considered two key factors when curating the test set. First, patches with concentrated code changes are more suitable for masking, as the core modifications can be effectively targeted. Second, if the function containing the masked changes is excessively long, it pose challenges due to the token limitations of LLMs. Balancing these considerations, we filtered the collected vulnerability patches and finalized a test set comprising 274 high-quality instances.
 
